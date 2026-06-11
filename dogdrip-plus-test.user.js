@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         개드립 Plus+ Test (Userscript)
 // @namespace    https://github.com/z3ro2201/dogdrip-plus-mobile-test
-// @version      1.1.18
+// @version      1.1.19
 // @description  개드립(dogdrip.net) 사용자차단 / 개드립콘차단 / 키워드차단 / 메모등록 / 설정 백업·복구 (모바일 지원)
 // @author       z3ro2201
 // @match        *://*.dogdrip.net/*
@@ -1528,15 +1528,17 @@
       );
       const content = wrapper.querySelector(".ext-blind-content");
       if (!btn || !content) return;
-      content.querySelectorAll(
-        "a.overlay, a.overlay-fill, a.overlay-top"
-      ).forEach((a) => {
-        a.style.pointerEvents = "none";
-        a.addEventListener("click", (e) => {
+      content.style.position = "relative";
+      if (!content.querySelector(".ext-blind-click-guard")) {
+        const guard = document.createElement("div");
+        guard.className = "ext-blind-click-guard";
+        guard.style.cssText = "position:absolute;inset:0;z-index:5;background:transparent;cursor:default;";
+        guard.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
         });
-      });
+        content.appendChild(guard);
+      }
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -2494,7 +2496,7 @@
   // src/mobile/main.ts
   (function() {
     "use strict";
-    const CURRENT_VERSION = "1.1.18";
+    const CURRENT_VERSION = "1.1.19";
     const VERSION_URL = "https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/refs/heads/main/version.txt";
     const storage = new MobileStorage();
     injectMobileCSS();
