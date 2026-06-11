@@ -10,8 +10,8 @@
 // @grant        GM.deleteValue
 // @run-at       document-start
 // @connect      raw.githubusercontent.com
-// @updateURL    https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/main/dogdrip-plus-test.user.js
-// @downloadURL  https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/main/dogdrip-plus-test.user.js
+// @updateURL    https://github.com/z3ro2201/dogdrip-plus-mobile-test/raw/refs/heads/main/dogdrip-plus-test.user.js
+// @downloadURL  https://github.com/z3ro2201/dogdrip-plus-mobile-test/raw/refs/heads/main/dogdrip-plus-test.user.js
 // ==/UserScript==
 
 (function () {
@@ -976,10 +976,7 @@
 
 \uC5C5\uB370\uC774\uD2B8 \uD398\uC774\uC9C0\uB85C \uC774\uB3D9\uD560\uAE4C\uC694?`
         )) {
-          window.open(
-            "https://github.com/z3ro2201/dogdrip-plus-mobilejs/raw/main/dogdrip-plus.user.js",
-            "_blank"
-          );
+          window.open("https://github.com/z3ro2201/dogdrip-plus-mobile-test/raw/refs/heads/main/dogdrip-plus-test.user.js", "_blank");
           return;
         }
       }
@@ -1628,8 +1625,13 @@
         if (!entry) return { text: "", color: "blue" };
         return { text: entry.memo || "", color: entry.color || "blue" };
       }
-      document.querySelectorAll("li.webzine").forEach((article) => {
+      document.querySelectorAll(
+        "li.webzine, li.ed.flex.flex-left.flex-middle"
+      ).forEach((article) => {
+        if (article.dataset.extListProcessed) return;
         const titleElement = article.querySelector(".title-link");
+        if (!titleElement) return;
+        article.dataset.extListProcessed = "true";
         const nicknameElement = article.querySelector(
           'a[class*="member_"]'
         );
@@ -2095,50 +2097,83 @@
           });
         }
       });
-      const dogconShopUrl = location.pathname.replace(/\//g, "") === "dogcon" || new URLSearchParams(location.search).get("mid") === "dogcon";
-      console.log(dogconShopUrl);
-      if (dogconShopUrl) {
-        const pageType = new URLSearchParams(location.search).get("dogcon_srl") ? "item" : "list";
+      const isDogconShop = location.pathname.replace(/\//g, "") === "dogcon" || new URLSearchParams(location.search).get("mid") === "dogcon";
+      if (isDogconShop) {
+        const dogconSrl = new URLSearchParams(location.search).get(
+          "dogcon_srl"
+        );
+        const pageType = dogconSrl ? "item" : "list";
         if (pageType === "item") {
-          const srl = new URLSearchParams(location.search).get("dogcon_srl");
+          const isGroupBlocked = blockedDogconGroupIds.includes(dogconSrl);
           const dogconBuyArea = document.querySelector("div.dogcon_buy");
-          const isDogconBlocked = blockedDogconGroupIds.includes(srl);
-          const dogconBlockButton = document.createElement("span");
-          dogconBlockButton.dataset.srl = String(srl);
-          dogconBlockButton.dataset.isGroupBlocked = String(isDogconBlocked);
-          dogconBlockButton.textContent = isDogconBlocked ? "\uAC1C\uB4DC\uB9BD\uCF58 \uCC28\uB2E8\uD574\uC81C" : "\uAC1C\uB4DC\uB9BD\uCF58 \uCC28\uB2E8";
-          dogconBlockButton.id = "ext-dogcon-action-group";
-          if (isDogconBlocked) {
-            const dogcon_file_list = document.querySelector(".dogcon_file_list");
-            if (dogcon_file_list)
-              dogcon_file_list.innerHTML = "\uC774 \uAC1C\uB4DC\uB9BD\uCF58\uC740 \uCC28\uB2E8\uB41C \uC0C1\uD0DC\uC785\uB2C8\uB2E4.";
-            dogconBlockButton.classList.add("buy_btn");
-          } else {
-            dogconBlockButton.classList.add("throw_btn");
-          }
-          dogconBuyArea?.appendChild(dogconBlockButton);
-        } else {
-          const dogconShopList = document.getElementById("bd_dogcon_list");
-          const dogconList = document.querySelector(".bd_lst.bd_tmb_lst");
-          if (dogconShopList && dogconList) {
-            const dogconShopItem = document.querySelectorAll("li.lst_stk");
-            dogconShopItem.forEach((dogconItem) => {
-              console.log(dogconItem);
+          if (dogconBuyArea && !document.getElementById("ext-dogcon-action-group")) {
+            const groupBtn = document.createElement("span");
+            groupBtn.id = "ext-dogcon-action-group";
+            groupBtn.dataset.srl = String(dogconSrl);
+            groupBtn.dataset.isGroupBlocked = String(isGroupBlocked);
+            groupBtn.style.cssText = "display:inline-block;cursor:pointer;padding:8px 16px;margin-top:8px;border-radius:8px;font-weight:bold;font-size:13px;text-align:center;";
+            if (isGroupBlocked) {
+              groupBtn.textContent = "\u2705 \uAC1C\uB4DC\uB9BD\uCF58 \uADF8\uB8F9 \uCC28\uB2E8 \uD574\uC81C";
+              groupBtn.style.background = "#dcfce7";
+              groupBtn.style.color = "#166534";
+              groupBtn.style.border = "1px solid #86efac";
+              const fileListEl = document.querySelector(".dogcon_file_list");
+              if (fileListEl)
+                fileListEl.innerHTML = '<div style="padding:24px;text-align:center;color:#64748b;font-weight:bold;">\u{1F6AB} \uCC28\uB2E8\uB41C \uAC1C\uB4DC\uB9BD\uCF58\uC785\uB2C8\uB2E4.</div>';
+            } else {
+              groupBtn.textContent = "\u274C \uC774 \uAC1C\uB4DC\uB9BD\uCF58 \uADF8\uB8F9 \uC804\uCCB4 \uCC28\uB2E8";
+              groupBtn.style.background = "#fee2e2";
+              groupBtn.style.color = "#b91c1c";
+              groupBtn.style.border = "1px solid #fca5a5";
+            }
+            groupBtn.addEventListener("click", () => {
+              const groupTitle = document.querySelector(
+                ".dogcon_view .ng, .dogcon_title, h1, h2"
+              )?.textContent?.trim() || "\uAC1C\uB4DC\uB9BD\uCF58";
+              storage.get(["blockedDogconGroups"]).then((res) => {
+                let list = res.blockedDogconGroups || [];
+                if (isGroupBlocked) {
+                  list = list.filter((x) => x.id !== dogconSrl);
+                } else if (!list.some((x) => x.id === dogconSrl)) {
+                  list.push({ id: dogconSrl, name: groupTitle });
+                }
+                storage.set({ blockedDogconGroups: list }).then(() => {
+                  window.location.reload();
+                });
+              });
             });
+            dogconBuyArea.appendChild(groupBtn);
           }
+        } else {
+          document.querySelectorAll("li.lst_stk").forEach((item) => {
+            if (item.dataset.extDogconProcessed) return;
+            const link = item.querySelector(
+              'a[href*="dogcon_srl="]'
+            );
+            if (!link) return;
+            const href = link.getAttribute("href") || "";
+            const m = href.match(/dogcon_srl=(\d+)/);
+            if (!m) return;
+            const srl = m[1];
+            item.dataset.extDogconProcessed = "true";
+            if (blockedDogconGroupIds.includes(srl)) {
+              const thumbWrap = item.querySelector(".tmb_wrp") || item;
+              const titleEl = item.querySelector(".ng");
+              const titleText = titleEl ? titleEl.textContent.trim() : "\uAC1C\uB4DC\uB9BD\uCF58";
+              const overlay = document.createElement("div");
+              overlay.className = "ext-dogcon-shop-blocked";
+              overlay.innerHTML = `\u{1F6AB}<br>\uCC28\uB2E8\uB41C \uAC1C\uB4DC\uB9BD\uCF58\uC785\uB2C8\uB2E4<br><span style="font-size:11px;color:#94a3b8;">(${titleText})</span>`;
+              overlay.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:160px;height:160px;background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;color:#64748b;font-size:13px;font-weight:bold;line-height:1.6;box-sizing:border-box;";
+              thumbWrap.replaceWith(overlay);
+            }
+          });
         }
       }
       if (result.disableVote === true) {
-        document.querySelectorAll("th").forEach((th) => {
-          if (th.textContent.trim() === "\uCD94\uCC9C \uC218" || th.textContent.trim() === "\uCD94\uCC9C") {
-            th.classList.add("hidden");
-          }
-        });
         document.querySelectorAll("td.ed.voteNum.text-primary").forEach((td) => {
           if (!td.dataset.extVoteProcessed) {
             td.dataset.extVoteProcessed = "true";
             td.innerHTML = '<i class="fas fa-baby"></i>';
-            td.classList.add("hidden");
           }
         });
         document.querySelectorAll("i.far.fa-thumbs-up").forEach((icon) => {
@@ -2148,7 +2183,6 @@
             const parent = icon.closest("span.text-primary");
             if (parent?.nextElementSibling?.classList.contains("text-primary"))
               parent.nextElementSibling.remove();
-            icon.remove();
           }
         });
         document.querySelectorAll("a.votebtn").forEach((btn) => {
@@ -2336,8 +2370,8 @@
   // src/mobile/main.ts
   (function() {
     "use strict";
-    const CURRENT_VERSION = "1.1.13";
-    const VERSION_URL = "https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobilejs/main/version.txt";
+    const CURRENT_VERSION = "1.1.14";
+    const VERSION_URL = "https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/refs/heads/main/version.txt";
     const storage = new MobileStorage();
     injectMobileCSS();
     let targetNicknameToBlock = "";
