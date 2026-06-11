@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         개드립 Plus+ Test (Userscript)
 // @namespace    https://github.com/z3ro2201/dogdrip-plus-mobile-test
-// @version      1.1.16
+// @version      1.1.17
 // @description  개드립(dogdrip.net) 사용자차단 / 개드립콘차단 / 키워드차단 / 메모등록 / 설정 백업·복구 (모바일 지원)
 // @author       z3ro2201
 // @match        *://*.dogdrip.net/*
@@ -1130,7 +1130,11 @@
   }
   function setCookie(name, value) {
     const maxAge = 365 * 24 * 60 * 60;
-    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; domain=.dogdrip.net; secure; samesite=none`;
+    const host = location.hostname;
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`;
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; domain=${host}`;
+    const baseDomain = host.split(".").slice(-2).join(".");
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; domain=.${baseDomain}`;
   }
   function getCookie(name) {
     const m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
@@ -2479,7 +2483,7 @@
   // src/mobile/main.ts
   (function() {
     "use strict";
-    const CURRENT_VERSION = "1.1.16";
+    const CURRENT_VERSION = "1.1.17";
     const VERSION_URL = "https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/refs/heads/main/version.txt";
     const storage = new MobileStorage();
     injectMobileCSS();
