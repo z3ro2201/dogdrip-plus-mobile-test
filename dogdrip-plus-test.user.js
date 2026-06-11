@@ -794,6 +794,7 @@
     html.ext-reader-mode #ext-memo-modal,
     html.ext-reader-mode #ext-dogcon-menu,
     html.ext-reader-mode #ext-gallery-overlay,
+    html.ext-reader-mode #ext-scroll-btn-wrap,
     html.ext-reader-mode #ext-loading-overlay { display: revert !important; }
 
     html.ext-reader-mode .container,
@@ -810,6 +811,41 @@
       font-size: 17px !important;
       line-height: 1.9 !important;
     }
+
+    /* \uAC1C\uB4DC\uB9BD \uAE30\uBCF8 \uC2A4\uD06C\uB864 \uD234\uBC15\uC2A4 \uC228\uAE40 */
+    .eq.button-scroll-tool-box { display: none !important; }
+
+    /* \u2500\u2500 \uC0AC\uC774\uB4DC \uD035 \uBC84\uD2BC (\uC138\uB85C \uC911\uC559 \uB5A0\uC788\uAC8C) \u2500\u2500 */
+    #ext-scroll-btn-wrap {
+      position: fixed;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      z-index: 999997;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: opacity 0.3s;
+    }
+    .ext-side-qk-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(30,30,40,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #e2e8f0;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+      transition: background 0.15s, opacity 0.3s;
+      padding: 0;
+    }
+    .ext-side-qk-btn:active { background: rgba(59,130,246,0.75); }
   `;
     const targetNode = document.head || document.documentElement;
     targetNode.appendChild(style);
@@ -881,6 +917,9 @@
         <div class="ext-switch-row"><label>\uCD94\uCC9C\uC218 \uBE44\uACF5\uAC1C</label><label class="ext-toggle"><input type="checkbox" id="s-disable-vote"><span class="ext-toggle-slider"></span></label></div>
         <div class="ext-switch-row"><label>\uC720\uD29C\uBE0C \uC54C\uACE0\uB9AC\uC998 \uBC29\uC9C0</label><label class="ext-toggle"><input type="checkbox" id="s-no-yt"><span class="ext-toggle-slider"></span></label></div>
         <div class="ext-switch-row"><label>\uB808\uBCA8 \uC544\uC774\uCF58 \uC228\uAE30\uAE30</label><label class="ext-toggle"><input type="checkbox" id="s-hide-level-icon"><span class="ext-toggle-slider"></span></label></div>
+        <p class="ext-section-label" style="margin-top:14px;">\uD14C\uB9C8 / \uAC1C\uB4DC\uB9BD\uCF58</p>
+        <div class="ext-switch-row"><label>\u{1F319} \uB2E4\uD06C\uBAA8\uB4DC</label><label class="ext-toggle"><input type="checkbox" id="s-dark-mode"><span class="ext-toggle-slider"></span></label></div>
+        <div class="ext-switch-row"><label>\u{1F636} \uAC1C\uB4DC\uB9BD\uCF58 \uC808\uC57D \uBAA8\uB4DC</label><label class="ext-toggle"><input type="checkbox" id="s-txt-mode"><span class="ext-toggle-slider"></span></label></div>
         <p class="ext-section-label" style="margin-top:14px;">\uCC28\uB2E8 \uBC29\uC2DD</p>
         <div class="ext-radio-group">
           <label class="ext-radio-item"><input type="radio" name="s-block-method" value="remove" id="s-bm-remove"> \uC81C\uAC70</label>
@@ -896,14 +935,14 @@
           <button class="ext-backup-btn" id="s-restore-btn">\u2B06\uFE0F \uBC31\uC5C5 \uBCF5\uAD6C</button>
         </div>
         <input type="file" id="s-restore-file" accept=".json" style="display:none;" />
-        <p class="ext-section-label" style="margin-top:18px;">Dogdrip++ \uBC31\uC5C5 \uC774\uAD00</p>
+        <p class="ext-section-label" style="margin-top:18px;">Dogdrip++ \uBC31\uC5C5 \uC774\uC2DD</p>
         <div class="ext-backup-row">
-          <button class="ext-backup-btn" id="s-restore-pp-btn" style="border-color:#f59e0b;color:#b45309;">\u{1F4E5} Dogdrip++ \uBC31\uC5C5\uB370\uC774\uD130 \uAC00\uC838\uC624\uAE30</button>
+          <button class="ext-backup-btn" id="s-restore-pp-btn" style="border-color:#f59e0b;color:#b45309;">\u{1F4E5} Dogdrip++ \uBC31\uC5C5 \uAC00\uC838\uC624\uAE30</button>
         </div>
         <input type="file" id="s-restore-pp-file" accept=".json" style="display:none;" />
         <p style="margin-top:16px;font-size:12px;color:#94a3b8; line-height:1.7;">
           \uBC31\uC5C5 \uD30C\uC77C\uC740 JSON \uD615\uC2DD\uC73C\uB85C \uC800\uC7A5\uB418\uBA70, \uB3D9\uC77C \uC720\uC800\uC2A4\uD06C\uB9BD\uD2B8 \uD658\uACBD\uC5D0\uC11C \uBCF5\uAD6C \uAC00\uB2A5\uD569\uB2C8\uB2E4.<br>
-          Dogdrip++ \uB370\uC774\uD130 \uC774\uAD00 \uC2DC \uCC28\uB2E8 \uC720\uC800\xB7\uD0A4\uC6CC\uB4DC\uB9CC \uAC00\uC838\uC624\uBA70, \uB098\uBA38\uC9C0 \uD604\uC7AC \uC124\uC815\uC740 \uC720\uC9C0\uB429\uB2C8\uB2E4.<br>
+          Dogdrip++ \uC774\uC2DD \uC2DC \uCC28\uB2E8 \uC720\uC800\xB7\uD0A4\uC6CC\uB4DC\uB9CC \uAC00\uC838\uC624\uBA70, \uB098\uBA38\uC9C0 \uD604\uC7AC \uC124\uC815\uC740 \uC720\uC9C0\uB429\uB2C8\uB2E4.<br>
           \u203B \uC124\uC815 \uBCC0\uACBD \uD6C4 \uD398\uC774\uC9C0 \uC0C8\uB85C\uACE0\uCE68 \uC2DC \uBC18\uC601\uB429\uB2C8\uB2E4.
         </p>
       </div>
@@ -1032,6 +1071,25 @@
         });
       });
     });
+    settingsPanel.querySelector("#s-dark-mode")?.addEventListener("change", (e) => {
+      const isDark = e.target.checked;
+      setCookie("theme", isDark ? "b" : "a");
+      setCookie("rx_color_scheme", isDark ? "dark" : "light");
+      location.reload();
+    });
+    settingsPanel.querySelector("#s-txt-mode")?.addEventListener("change", (e) => {
+      const on = e.target.checked;
+      setCookie("txtmode", on ? "1" : "0");
+      location.reload();
+    });
+  }
+  function setCookie(name, value) {
+    const maxAge = 365 * 24 * 60 * 60;
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; domain=.dogdrip.net; secure; samesite=none`;
+  }
+  function getCookie(name) {
+    const m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : null;
   }
   function loadPanelData(tabId, storage) {
     switch (tabId) {
@@ -1244,6 +1302,14 @@
       const method = r.blockMethod || "remove";
       const rm = document.getElementById(`s-bm-${method}`);
       if (rm) rm.checked = true;
+      const darkEl = document.getElementById("s-dark-mode");
+      if (darkEl) {
+        const scheme = getCookie("rx_color_scheme");
+        const theme = getCookie("theme");
+        darkEl.checked = scheme === "dark" || theme === "b";
+      }
+      const txtEl = document.getElementById("s-txt-mode");
+      if (txtEl) txtEl.checked = getCookie("txtmode") === "1";
     });
   }
   function doBackup(storage) {
@@ -1380,7 +1446,7 @@
             userMemos: cur.userMemos || {}
           }).then(() => {
             alert(
-              `\u{1F389} Dogdrip++ \uB370\uC774\uD130 \uC774\uAD00 \uC644\uB8CC!
+              `\u{1F389} Dogdrip++ \uC774\uC2DD \uC644\uB8CC!
 \uCC28\uB2E8 \uC720\uC800 ${blocked_users.length}\uBA85, \uD0A4\uC6CC\uB4DC ${keywords.length}\uAC1C\uB97C \uAC00\uC838\uC654\uC2B5\uB2C8\uB2E4.
 \uD398\uC774\uC9C0\uB97C \uC0C8\uB85C\uACE0\uCE68\uD569\uB2C8\uB2E4.`
             );
@@ -2029,11 +2095,50 @@
           });
         }
       });
+      const dogconShopUrl = location.pathname.replace(/\//g, "") === "dogcon" || new URLSearchParams(location.search).get("mid") === "dogcon";
+      console.log(dogconShopUrl);
+      if (dogconShopUrl) {
+        const pageType = new URLSearchParams(location.search).get("dogcon_srl") ? "item" : "list";
+        if (pageType === "item") {
+          const srl = new URLSearchParams(location.search).get("dogcon_srl");
+          const dogconBuyArea = document.querySelector("div.dogcon_buy");
+          const isDogconBlocked = blockedDogconGroupIds.includes(srl);
+          const dogconBlockButton = document.createElement("span");
+          dogconBlockButton.dataset.srl = String(srl);
+          dogconBlockButton.dataset.isGroupBlocked = String(isDogconBlocked);
+          dogconBlockButton.textContent = isDogconBlocked ? "\uAC1C\uB4DC\uB9BD\uCF58 \uCC28\uB2E8\uD574\uC81C" : "\uAC1C\uB4DC\uB9BD\uCF58 \uCC28\uB2E8";
+          dogconBlockButton.id = "ext-dogcon-action-group";
+          if (isDogconBlocked) {
+            const dogcon_file_list = document.querySelector(".dogcon_file_list");
+            if (dogcon_file_list)
+              dogcon_file_list.innerHTML = "\uC774 \uAC1C\uB4DC\uB9BD\uCF58\uC740 \uCC28\uB2E8\uB41C \uC0C1\uD0DC\uC785\uB2C8\uB2E4.";
+            dogconBlockButton.classList.add("buy_btn");
+          } else {
+            dogconBlockButton.classList.add("throw_btn");
+          }
+          dogconBuyArea?.appendChild(dogconBlockButton);
+        } else {
+          const dogconShopList = document.getElementById("bd_dogcon_list");
+          const dogconList = document.querySelector(".bd_lst.bd_tmb_lst");
+          if (dogconShopList && dogconList) {
+            const dogconShopItem = document.querySelectorAll("li.lst_stk");
+            dogconShopItem.forEach((dogconItem) => {
+              console.log(dogconItem);
+            });
+          }
+        }
+      }
       if (result.disableVote === true) {
+        document.querySelectorAll("th").forEach((th) => {
+          if (th.textContent.trim() === "\uCD94\uCC9C \uC218" || th.textContent.trim() === "\uCD94\uCC9C") {
+            th.classList.add("hidden");
+          }
+        });
         document.querySelectorAll("td.ed.voteNum.text-primary").forEach((td) => {
           if (!td.dataset.extVoteProcessed) {
             td.dataset.extVoteProcessed = "true";
             td.innerHTML = '<i class="fas fa-baby"></i>';
+            td.classList.add("hidden");
           }
         });
         document.querySelectorAll("i.far.fa-thumbs-up").forEach((icon) => {
@@ -2043,6 +2148,7 @@
             const parent = icon.closest("span.text-primary");
             if (parent?.nextElementSibling?.classList.contains("text-primary"))
               parent.nextElementSibling.remove();
+            icon.remove();
           }
         });
         document.querySelectorAll("a.votebtn").forEach((btn) => {
@@ -2281,27 +2387,63 @@
     gearBtn.textContent = "\u2699\uFE0F";
     gearWrap.appendChild(gearUpdateBadge);
     gearWrap.appendChild(gearBtn);
+    const isPostPage = /\/\d+($|[?#])/.test(location.pathname + location.search) || !!document.querySelector(".ed.article-head.margin-bottom-large");
     const scrollBtnWrap = document.createElement("div");
     scrollBtnWrap.id = "ext-scroll-btn-wrap";
-    const scrollTopBtn = document.createElement("button");
-    scrollTopBtn.id = "ext-scroll-top-btn";
-    scrollTopBtn.textContent = "\u25B2";
-    scrollTopBtn.title = "\uB9E8 \uC704\uB85C";
-    scrollTopBtn.style.display = "none";
-    scrollTopBtn.addEventListener(
-      "click",
+    function makeQkBtn(id, label, title, onClick) {
+      const b = document.createElement("button");
+      b.id = id;
+      b.className = "ext-side-qk-btn";
+      b.textContent = label;
+      b.title = title;
+      b.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick();
+      });
+      return b;
+    }
+    const scrollTopBtn = makeQkBtn(
+      "ext-scroll-top-btn",
+      "\u25B2",
+      "\uB9E8 \uC704\uB85C",
       () => window.scrollTo({ top: 0, behavior: "smooth" })
     );
-    const scrollBottomBtn = document.createElement("button");
-    scrollBottomBtn.id = "ext-scroll-bottom-btn";
-    scrollBottomBtn.textContent = "\u25BC";
-    scrollBottomBtn.title = "\uB9E8 \uC544\uB798\uB85C";
-    scrollBottomBtn.addEventListener(
-      "click",
+    scrollTopBtn.style.display = "none";
+    const scrollBottomBtn = makeQkBtn(
+      "ext-scroll-bottom-btn",
+      "\u25BC",
+      "\uB9E8 \uC544\uB798\uB85C",
       () => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })
     );
     scrollBtnWrap.appendChild(scrollTopBtn);
     scrollBtnWrap.appendChild(scrollBottomBtn);
+    if (isPostPage) {
+      const commentBtn = makeQkBtn("ext-qk-comment", "\u{1F4AC}", "\uB313\uAE00", () => {
+        const t = document.getElementById("comment_top") || document.querySelector(".ed.comment, #comment_list");
+        if (t) t.scrollIntoView({ behavior: "smooth" });
+      });
+      const contentBtn = makeQkBtn("ext-qk-content", "\u{1F4C4}", "\uBCF8\uBB38", () => {
+        const t = document.querySelector(
+          '[class*="rhymix_content"][class*="xe_content"], .ed.article-head.margin-bottom-large'
+        );
+        if (t) t.scrollIntoView({ behavior: "smooth" });
+      });
+      const listBtn = makeQkBtn("ext-qk-list", "\u{1F4CB}", "\uBAA9\uB85D", () => {
+        const listLink = document.querySelector(
+          ".ed.article-toolbar a[href]"
+        );
+        if (listLink) {
+          location.href = listLink.href;
+          return;
+        }
+        const m = location.pathname.match(/^\/([a-z]+)/);
+        if (m) location.href = "/" + m[1];
+      });
+      scrollBtnWrap.appendChild(commentBtn);
+      scrollBtnWrap.appendChild(contentBtn);
+      scrollBtnWrap.appendChild(listBtn);
+    }
     const settingsPanel = document.createElement("div");
     settingsPanel.id = "ext-settings-panel";
     settingsPanel.innerHTML = buildSettingsPanelHTML();
