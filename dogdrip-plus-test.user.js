@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         개드립 Plus+ Test (Userscript)
 // @namespace    https://github.com/z3ro2201/dogdrip-plus-mobile-test
-// @version      1.1.14
+// @version      1.1.15
 // @description  개드립(dogdrip.net) 사용자차단 / 개드립콘차단 / 키워드차단 / 메모등록 / 설정 백업·복구 (모바일 지원)
 // @author       z3ro2201
 // @match        *://*.dogdrip.net/*
@@ -815,37 +815,40 @@
     /* \uAC1C\uB4DC\uB9BD \uAE30\uBCF8 \uC2A4\uD06C\uB864 \uD234\uBC15\uC2A4 \uC228\uAE40 */
     .eq.button-scroll-tool-box { display: none !important; }
 
-    /* \u2500\u2500 \uC0AC\uC774\uB4DC \uD035 \uBC84\uD2BC (\uC138\uB85C \uC911\uC559 \uB5A0\uC788\uAC8C) \u2500\u2500 */
+    /* \u2500\u2500 \uC0AC\uC774\uB4DC \uD035 \uBC84\uD2BC (\uAE30\uC5B4\uBC84\uD2BC \uBC14\uB85C \uC704, \uC6B0\uCE21 \uD558\uB2E8) \u2500\u2500 */
     #ext-scroll-btn-wrap {
       position: fixed;
-      top: 50%;
-      left: 12px;
-      transform: translateY(-50%);
+      bottom: 78px;
+      right: 16px;
       z-index: 999997;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: opacity 0.3s;
+      gap: 10px;
+      align-items: center;
     }
     .ext-side-qk-btn {
-      width: 38px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      border: none;
-      background: rgba(30,30,40,0.55);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      color: #e2e8f0;
-      font-size: 15px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(30,30,40,0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #f1f5f9;
+      font-size: 17px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.22);
-      transition: background 0.15s, opacity 0.3s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.32);
+      transition: background 0.15s, transform 0.1s;
       padding: 0;
+      line-height: 1;
     }
-    .ext-side-qk-btn:active { background: rgba(59,130,246,0.75); }
+    .ext-side-qk-btn:active {
+      background: rgba(59,130,246,0.9);
+      transform: scale(0.9);
+    }
   `;
     const targetNode = document.head || document.documentElement;
     targetNode.appendChild(style);
@@ -2370,7 +2373,7 @@
   // src/mobile/main.ts
   (function() {
     "use strict";
-    const CURRENT_VERSION = "1.1.14";
+    const CURRENT_VERSION = "1.1.15";
     const VERSION_URL = "https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/refs/heads/main/version.txt";
     const storage = new MobileStorage();
     injectMobileCSS();
@@ -3030,15 +3033,11 @@
         () => {
           gearWrap.style.opacity = "0";
           gearWrap.style.pointerEvents = "none";
-          scrollBtnWrap.style.opacity = "0";
-          scrollBtnWrap.style.pointerEvents = "none";
+          updateScrollButtons();
           if (scrollTimer) clearTimeout(scrollTimer);
           scrollTimer = setTimeout(() => {
             gearWrap.style.opacity = "1";
             gearWrap.style.pointerEvents = "";
-            scrollBtnWrap.style.opacity = "1";
-            scrollBtnWrap.style.pointerEvents = "";
-            updateScrollButtons();
           }, 800);
         },
         { passive: true }
