@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         개드립 Plus+ Test (Userscript)
 // @namespace    https://github.com/z3ro2201/dogdrip-plus-mobile-test
-// @version      1.1.21
+// @version      1.1.15
 // @description  개드립(dogdrip.net) 사용자차단 / 개드립콘차단 / 키워드차단 / 메모등록 / 설정 백업·복구 (모바일 지원)
 // @author       z3ro2201
 // @match        *://*.dogdrip.net/*
@@ -10,6 +10,7 @@
 // @grant        GM.deleteValue
 // @run-at       document-start
 // @connect      raw.githubusercontent.com
+// @connect      workers.dev
 // @updateURL    https://github.com/z3ro2201/dogdrip-plus-mobile-test/raw/refs/heads/main/dogdrip-plus-test.user.js
 // @downloadURL  https://github.com/z3ro2201/dogdrip-plus-mobile-test/raw/refs/heads/main/dogdrip-plus-test.user.js
 // ==/UserScript==
@@ -2496,8 +2497,8 @@
   // src/mobile/main.ts
   (function() {
     "use strict";
-    const CURRENT_VERSION = "1.1.21";
-    const VERSION_URL = "https://raw.githubusercontent.com/z3ro2201/dogdrip-plus-mobile-test/refs/heads/main/version.txt";
+    const CURRENT_VERSION = "1.1.15";
+    const VERSION_URL = "https://dogdrip-stats.dogdrip-plus.workers.dev/test";
     const storage = new MobileStorage();
     injectMobileCSS();
     let targetNicknameToBlock = "";
