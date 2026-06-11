@@ -909,7 +909,7 @@
       </div>
       <div class="ext-tab-bar">
         <button class="ext-tab active" data-tab="tab-block-user">\u{1F464} \uC0AC\uC6A9\uC790\uCC28\uB2E8</button>
-        <button class="ext-tab" data-tab="tab-keyword">\u{1F511} \uD0A4\uC6CC\uB4DC\uCC28\uB2E8</button>
+        <button class="ext-tab" data-tab="tab-keyword">\u2328\uFE0F \uD0A4\uC6CC\uB4DC\uCC28\uB2E8</button>
         <button class="ext-tab" data-tab="tab-dogcon">\u{1F436} \uAC1C\uB4DC\uB9BD\uCF58</button>
         <button class="ext-tab" data-tab="tab-memo">\u{1F4DD} \uBA54\uBAA8</button>
         <button class="ext-tab" data-tab="tab-display">\u{1F5A5} \uD45C\uC2DC</button>
@@ -1523,9 +1523,20 @@
   function attachBlindToggleEvents(container) {
     container.querySelectorAll(".ext-blind-wrapper:not([data-bound])").forEach((wrapper) => {
       wrapper.dataset.bound = "true";
-      const btn = wrapper.querySelector(".ext-blind-toggle-btn");
+      const btn = wrapper.querySelector(
+        ".ext-blind-toggle-btn"
+      );
       const content = wrapper.querySelector(".ext-blind-content");
       if (!btn || !content) return;
+      content.querySelectorAll(
+        "a.overlay, a.overlay-fill, a.overlay-top"
+      ).forEach((a) => {
+        a.style.pointerEvents = "none";
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
